@@ -1,6 +1,6 @@
 # 🌊 BarraTour — Agendamento de Turismo em Barra Bonita
 
-[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)](https://github.com/Turgho/BarraTour)
+[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-red)](https://github.com/Turgho/BarraTour)
 [![Linguagem](https://img.shields.io/badge/Linguagem-C%23-blue)](https://docs.microsoft.com/dotnet/csharp/)
 [![Último commit](https://img.shields.io/github/last-commit/Turgho/BarraTour)](https://github.com/Turgho/BarraTour/commits/main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](./LICENSE)
