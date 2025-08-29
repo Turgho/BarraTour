@@ -1,56 +1,82 @@
-# Barra Bonita Turismo
+# 🌊 BarraTour — Agendamento de Turismo em Barra Bonita
 
-[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)](https://github.com/seu-usuario/barra-bonita-turismo)
-[![Linguagem](https://img.shields.io/badge/Linguagem-C%23-blue)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![Última Atualização](https://img.shields.io/github/last-commit/Turgho/BarraTour)](https://github.com/Turgho/BarraTour/commits/main)
-[![Issues Abertas](https://img.shields.io/github/issues/Turgho/BarraTour)](https://github.com/Turgho/BarraTour/issues)
+[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)](https://github.com/Turgho/BarraTour)
+[![Linguagem](https://img.shields.io/badge/Linguagem-C%23-blue)](https://docs.microsoft.com/dotnet/csharp/)
+[![Último commit](https://img.shields.io/github/last-commit/Turgho/BarraTour)](https://github.com/Turgho/BarraTour/commits/main)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green)](./LICENSE)
 
-Plataforma de agendamento e gestão de serviços turísticos em Barra Bonita, oferecendo painéis para turistas, empresas e administração, com pagamentos e mensageria integrados.
+**BarraTour** é uma PWA para agendamento de passeios e atividades em **Barra Bonita (SP)**. O projeto conecta turistas e empresas locais, permitindo descobrir atrações, criar reservas e — futuramente — processar pagamentos e comunicação em tempo real.
 
----
-
-## 📂 Estrutura de Documentação
-
-Toda a documentação detalhada está na pasta `docs/`:
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [01_Resumo.md](docs/01_Resumo.md) | Resumo do projeto e objetivos principais |
-| [02_Escopo.md](docs/02_Escopo.md) | Escopo funcional e não funcional do sistema |
-| [03_Stack.md](docs/03_Stack.md) | Tecnologias e ferramentas utilizadas |
-| [04_Arquitetura.md](docs/04_Arquitetura.md) | Diagrama de arquitetura e explicações |
-| [05_BancoDeDados.md](docs/05_BancoDeDados.md) | Estrutura do banco de dados e tabelas |
-| [06_UserStories.md](docs/06_UserStories.md) | User Stories e casos de uso detalhados |
-| [07_API.md](docs/07_API.md) | Endpoints, rotas e especificações da API |
-| [08_Fluxos.md](docs/08_Fluxos.md) | Fluxos de usuário e painéis em diagramas Mermaid |
-| [09_DesignUX.md](docs/09_DesignUX.md) | Wireframes, protótipos e UX/UI design |
-| [10_Pagamentos.md](docs/10_Pagamentos.md) | Fluxo de pagamento, integrações e webhook |
-| [11_Mensageria.md](docs/11_Mensageria.md) | Chat, notificações e comunicação entre usuários |
-| [12_Segurança.md](docs/12_Segurança.md) | Autenticação, roles e segurança geral |
-| [13_Testes.md](docs/13_Testes.md) | Testes unitários, integração e aceitação |
-| [14_Deploy & Infra.md](docs/14_Deploy&Infra.md) | Estrutura de deploy e infraestrutura |
-| [15_Roadmap.md](docs/15_Roadmap.md) | Roadmap e planejamentos futuros |
+> **Status atual:** repositório público — desenvolvimento ativo.  
+> **Escopo visível aqui:** somente o **MVP 1** (Cadastro, Login e perfis). A documentação completa está em `docs/`.
 
 ---
 
-## ⚡ Funcionalidades Principais
+## 🎯 MVP 1 — Recursos disponíveis neste repositório
+Implementação mínima viável para começar a usar e demonstrar o fluxo básico:
 
-- Cadastro e login de turistas e empresas com autenticação JWT
-- Catálogo de serviços e eventos com filtros e geolocalização
-- Favoritos, wishlist e histórico de reservas
-- Pagamentos integrados via AbacatePay, Pix e cartão
-- Painéis administrativos para empresas e admins
-- Sistema de mensageria e notificações
-- Avaliações e feedbacks de serviços
+- ✅ **Cadastro de turista** (nome, email, senha, idioma preferido)
+- ✅ **Cadastro de empresa** (nome, email, senha, CNPJ/CPF, setor)
+- ✅ **Login** com autenticação JWT
+- ✅ **Recuperação de senha** (fluxo básico)
+- ✅ **Painéis distintos** (rotas/papéis): turista e empresa (visualizações iniciais)
+- ✅ **Estrutura do banco** (SQL Server) e migrations iniciais (docs em `docs/05_BancoDeDados.md`)
+- ✅ Documentação do projeto e wireframes em `docs/`
 
----
-
-## 📌 Observações
-
-- O projeto atualmente está **privado**, mas pode ser aberto futuramente para comunidade.
-- Toda a documentação completa está organizada na pasta `docs/` e será atualizada conforme o desenvolvimento.
-- O foco é melhorar a experiência turística em Barra Bonita, conectando turistas, empresas e administração de forma integrada.
+> Observação: funcionalidades como reservas completas, pagamentos e mensageria estão documentadas e planeadas (veja `docs/`), mas não estão ativas no MVP1 deste repositório público.
 
 ---
 
-> Desenvolvido com o objetivo de criar uma plataforma completa para agendamento de turismo, pagamentos e comunicação eficiente entre usuários.
+## 📂 Documentação (pasta `docs/`)
+A documentação completa foi organizada em arquivos Markdown dentro de `docs/`. Navegue pelos arquivos para ver detalhes do projeto:
+
+- `docs/01_Resumo.md` — Visão geral
+- `docs/02_Escopo.md` — Escopo do produto
+- `docs/03_Stack.md` — Tecnologias sugeridas
+- `docs/04_Arquitetura.md` — Diagrama e arquitetura
+- `docs/05_BancoDeDados.md` — Modelagem SQL Server (DDL)
+- `docs/06_UserStories.md` — Backlog e user stories
+- `docs/07_API.md` — Contratos e formato de retorno da API
+- `docs/08_Fluxos.md` — Fluxos em Mermaid
+- `docs/09_DesignUX.md` — Wireframes e UX
+- `docs/10_Pagamentos.md` — Planejamento AbacatePay
+- `docs/11_Mensageria.md` — Mensageria e notificações
+- `docs/12_Segurança.md` — Políticas de segurança
+- `docs/13_Testes.md` — Plano de testes
+- `docs/14_Deploy&Infra.md` — Deploy e infra (CI/CD)
+- `docs/15_Roadmap.md` — Sprints e roadmap
+
+---
+
+## 🧭 Tecnologias (visão do MVP)
+- **Backend:** C# / .NET (API REST)
+- **Frontend:** Angular (PWA) — mobile-first
+- **DB:** SQL Server (modelagem pronta em `docs/05_BancoDeDados.md`)
+- **Auth:** JWT (tokens de acesso e refresh)
+
+> Obs.: outras integrações (SignalR, AbacatePay, RabbitMQ) estão descritas em `docs/` para fases posteriores.
+
+---
+
+## ✍️ Como contribuir
+Se quiser contribuir (issues, PRs, feedback):
+- Abra uma **issue** descrevendo a proposta ou bug.
+- Faça fork, crie branch `feature/...` ou `fix/...` e abra PR contra `main`.
+- Leia `CONTRIBUTING.md` e `CODE_OF_CONDUCT.md` (se houver) antes de submeter.
+
+---
+
+## 🔒 Segurança e boas práticas
+- **Nenhuma credencial sensível** deve ser commitada.
+- Use secrets do CI para chaves (se houver).
+- Se encontrar vulnerabilidade, reporte para o contato indicado em `SECURITY.md`.
+
+---
+
+## ⚡ Contato
+- Autor / Maintainer: **Turgho** — perfil no GitHub: [Turgho](https://github.com/Turgho)
+- Para sugestões ou dúvidas, abra uma **issue** no repositório.
+
+---
+
+Obrigado por visitar o **BarraTour** — se quiser, posso ajudar a gerar os `docs/*.md` finais, criar badges dinâmicos para CI, ou preparar um *demo* público (deploy) quando o MVP1 estiver pronto. Quer que eu gere algum arquivo `docs/` agora?
