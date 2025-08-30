@@ -1,0 +1,21 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-CU20-ubuntu-20.04
+    container_name: barra-tour-sql
+    environment:
+      - SA_PASSWORD=Barra@Tour3002
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    network_mode: "host"
+    healthcheck:
+      test: ["CMD-SHELL", "pidof sqlservr"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 30s
+
+volumes:
+  sql_data:
