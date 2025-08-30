@@ -9,6 +9,8 @@
 
 .git/
 .idea/
+docker/
+Migrations/
 
 # Build results
 [Dd]ebug/
@@ -23,8 +25,6 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
-[Ll]ogs/
 
 # .NET Core
 project.lock.json
