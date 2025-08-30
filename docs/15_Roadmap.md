@@ -6,7 +6,7 @@
 **UCs:** UC-01 (Cadastro de Usuário), UC-02 (Login), UC-04 (Recuperação de Senha).  
 **Infra/DevOps:**
 
-- Configurar banco de dados inicial (PostgreSQL).
+- Configurar banco de dados inicial (SQL Server).
     
 - Configurar autenticação JWT.
     
