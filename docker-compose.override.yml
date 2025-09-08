@@ -1,0 +1,7 @@
+services:
+  api:
+    build:
+      args:
+        - BUILD_CONFIGURATION=Debug
+    environment:
+      - DOTNET_DEBUG=1

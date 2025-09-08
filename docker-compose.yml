@@ -1,21 +1,68 @@
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-CU20-ubuntu-20.04
+    image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: barra-tour-sql
     environment:
       - SA_PASSWORD=Barra@Tour3002
       - ACCEPT_EULA=Y
+      - MSSQL_PID=Developer
     ports:
       - "1433:1433"
     volumes:
       - sql_data:/var/opt/mssql
-    network_mode: "host"
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD-SHELL", "pidof sqlservr"]
-      interval: 15s
-      timeout: 10s
-      retries: 20
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 10
       start_period: 30s
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: barra-tour-redis
+    environment:
+      - REDIS_PASSWORD=BarraRedis3002
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --requirepass $${REDIS_PASSWORD} --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "$${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: barra-tour-api:dev
+    container_name: barra-tour-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BarraTourDb;User Id=sa;Password=Barra@Tour3002;TrustServerCertificate=true;
+      - ConnectionStrings__Redis=redis:6379,password=BarraRedis3002,abortConnect=false
+      - Jwt__SecretKey=DevelopmentSuperSecretKeyThatIsLongEnoughForSecurity
+      - Jwt__Issuer=BarraTour.API
+      - Jwt__Audience=BarraTour.App
+    ports:
+      - "5078:80"
+      - "7249:443"
+    volumes:
+      - .:/app
+      - ~/.nuget/packages:/root/.nuget/packages
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   sql_data:
+  redis_data:

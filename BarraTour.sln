@@ -5,7 +5,15 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EAB19BF5-6ED5-41AE-9B11-47F1BA5E15C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarraTour.Api", "src\BarraTour.Api\BarraTour.Api.csproj", "{FF0E7E74-BD28-440E-8805-AF05E334DEA3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BarraTour.Backend", "BarraTour.Backend", "{D105E779-3744-4821-BDFD-24B54AD9A645}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarraTour.Domain", "src\BarraTour.Backend\BarraTour.Domain\BarraTour.Domain.csproj", "{C86E5A18-EE67-4DAD-BC51-8953586A5906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarraTour.Infrastructure", "src\BarraTour.Backend\BarraTour.Infrastructure\BarraTour.Infrastructure.csproj", "{9E6F81D1-3FF3-429B-BBFE-4E361834FE49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarraTour.Application", "src\BarraTour.Backend\BarraTour.Application\BarraTour.Application.csproj", "{23C29CC8-B8BE-476B-A696-544508E0ADAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarraTour.Api", "src\BarraTour.Backend\BarraTour.Api\BarraTour.Api.csproj", "{BFC980DF-7336-4C21-B5B9-81EAE120B94E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,12 +24,28 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FF0E7E74-BD28-440E-8805-AF05E334DEA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF0E7E74-BD28-440E-8805-AF05E334DEA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF0E7E74-BD28-440E-8805-AF05E334DEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF0E7E74-BD28-440E-8805-AF05E334DEA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C86E5A18-EE67-4DAD-BC51-8953586A5906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C86E5A18-EE67-4DAD-BC51-8953586A5906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C86E5A18-EE67-4DAD-BC51-8953586A5906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C86E5A18-EE67-4DAD-BC51-8953586A5906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E6F81D1-3FF3-429B-BBFE-4E361834FE49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E6F81D1-3FF3-429B-BBFE-4E361834FE49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E6F81D1-3FF3-429B-BBFE-4E361834FE49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E6F81D1-3FF3-429B-BBFE-4E361834FE49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23C29CC8-B8BE-476B-A696-544508E0ADAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23C29CC8-B8BE-476B-A696-544508E0ADAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23C29CC8-B8BE-476B-A696-544508E0ADAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23C29CC8-B8BE-476B-A696-544508E0ADAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC980DF-7336-4C21-B5B9-81EAE120B94E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC980DF-7336-4C21-B5B9-81EAE120B94E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC980DF-7336-4C21-B5B9-81EAE120B94E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC980DF-7336-4C21-B5B9-81EAE120B94E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{FF0E7E74-BD28-440E-8805-AF05E334DEA3} = {EAB19BF5-6ED5-41AE-9B11-47F1BA5E15C8}
+		{D105E779-3744-4821-BDFD-24B54AD9A645} = {EAB19BF5-6ED5-41AE-9B11-47F1BA5E15C8}
+		{C86E5A18-EE67-4DAD-BC51-8953586A5906} = {D105E779-3744-4821-BDFD-24B54AD9A645}
+		{9E6F81D1-3FF3-429B-BBFE-4E361834FE49} = {D105E779-3744-4821-BDFD-24B54AD9A645}
+		{23C29CC8-B8BE-476B-A696-544508E0ADAB} = {D105E779-3744-4821-BDFD-24B54AD9A645}
+		{BFC980DF-7336-4C21-B5B9-81EAE120B94E} = {D105E779-3744-4821-BDFD-24B54AD9A645}
 	EndGlobalSection
 EndGlobal
