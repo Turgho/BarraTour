@@ -10,6 +10,7 @@ if ! docker info > /dev/null 2>&1; then
 fi
 
 # Build e execução
+docker-compose down
 docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d
 
 echo "✅ Serviços iniciados:"

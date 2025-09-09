@@ -1,9 +1,9 @@
 services:
   sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest  # Usar latest para garantir sqlcmd
     container_name: barra-tour-sql
     environment:
-      - SA_PASSWORD=Barra@Tour3002
+      - SA_PASSWORD=${SA_PASSWORD}
       - ACCEPT_EULA=Y
       - MSSQL_PID=Developer
     ports:
@@ -16,14 +16,14 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 30s
+      start_period: 60s
     restart: unless-stopped
 
   redis:
-    image: redis:7-alpine
+    image: redis:8.2.1-alpine
     container_name: barra-tour-redis
     environment:
-      - REDIS_PASSWORD=BarraRedis3002
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
@@ -45,17 +45,21 @@ services:
     container_name: barra-tour-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BarraTourDb;User Id=sa;Password=Barra@Tour3002;TrustServerCertificate=true;
-      - ConnectionStrings__Redis=redis:6379,password=BarraRedis3002,abortConnect=false
-      - Jwt__SecretKey=DevelopmentSuperSecretKeyThatIsLongEnoughForSecurity
-      - Jwt__Issuer=BarraTour.API
-      - Jwt__Audience=BarraTour.App
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=BarraTourDb;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=true;
+      - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD},abortConnect=false
+      - Jwt__SecretKey=${JWT_SECRET_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__ExpiryInMinutes=${JWT_EXPIRY_IN_MINUTES}
+      - DOTNET_USE_POLLING_FILE_WATCHER=1  # hot reload
+      - ASPNETCORE_URLS=http://0.0.0.0:80;https://0.0.0.0:443
     ports:
       - "5078:80"
       - "7249:443"
     volumes:
-      - .:/app
-      - ~/.nuget/packages:/root/.nuget/packages
+      - .:/app  # Monta o código fonte para hot reload
+      - ~/.nuget/packages:/root/.nuget/packages  # Cache de pacotes NuGet
+      - ~/.aspnet/https:/root/.aspnet/https  # Certificados HTTPS
     depends_on:
       sqlserver:
         condition: service_healthy
