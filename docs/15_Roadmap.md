@@ -1,146 +1,152 @@
-## 📌 Planejamento de Sprints (1 semana cada)
+## 🗓️ Planejamento de Sprints (2 semanas cada)
 
-### 🟣 Sprint 1 – Autenticação e Cadastro de Usuários
+### Sprint 1: Base do Sistema - Autenticação e Perfis
 
-**Objetivo:** Garantir que usuários possam se cadastrar e acessar a plataforma com segurança.  
-**UCs:** UC-01 (Cadastro de Usuário), UC-02 (Login), UC-04 (Recuperação de Senha).  
-**Infra/DevOps:**
+**Duração:** 2 semanas  
+**Objetivo:** Estabelecer fundamentos de autenticação e gestão de usuários
 
-- Configurar banco de dados inicial (SQL Server).
+- US01: Cadastro e autenticação de usuários
     
-- Configurar autenticação JWT.
+- US02: Cadastro e aprovação de empresas
     
-- Deploy básico no ambiente de staging.  
-    **Entregáveis:**  
-    ✅ Login, cadastro e recuperação de senha funcionais  
-    ✅ Base do sistema online (backend + banco + frontend inicial)
+- US03: Gestão de perfis de usuário
     
+- Configuração inicial do projeto e infraestrutura
+    
+
+### Sprint 2: Catálogo e Conteúdo
+
+**Duração:** 2 semanas  
+**Objetivo:** Implementar sistema de catálogo e gestão de conteúdo
+
+- US04: Sistema de busca e filtros
+    
+- US05: Detalhamento de serviços
+    
+- US06: Cadastro de serviços por empresas
+    
+- Integração com armazenamento de imagens
+    
+
+### Sprint 3: Sistema de Reservas
+
+**Duração:** 2 semanas  
+**Objetivo:** Implementar fluxo completo de reservas
+
+- US07: Criação de reservas
+    
+- US09: Gestão de reservas para empresas
+    
+- Sistema de calendário e disponibilidade
+    
+- Notificações de novas reservas
+    
+
+### Sprint 4: Pagamentos e Transações
+
+**Duração:** 2 semanas  
+**Objetivo:** Implementar sistema de pagamentos seguro
+
+- US08: Integração com gateway de pagamento
+    
+- Sistema de webhooks para confirmações
+    
+- Gestão de status de pagamentos
+    
+- Histórico transacional
+    
+
+### Sprint 5: Funcionalidades de Engajamento
+
+**Duração:** 2 semanas  
+**Objetivo:** Adicionar features de interação e retenção
+
+- US11: Sistema de favoritos
+    
+- US12: Sistema de avaliações
+    
+- US13: Sistema de notificações
+    
+- Otimizações de performance
+    
+
+### Sprint 6: Administração e Analytics
+
+**Duração:** 2 semanas  
+**Objetivo:** Implementar painéis de gestão e analytics
+
+- US10: Painel administrativo completo
+    
+- US14: Sistema de relatórios
+    
+- Monitoramento e logs
+    
+- Preparação para deploy em produção
 
 ---
 
-### 🟣 Sprint 2 – Catálogo de Empresas
+## 🎯 Metas por Sprint:
 
-**Objetivo:** Criar o diretório de empresas para navegação pelos usuários.  
-**UCs:** UC-06 (Cadastro de Empresa), UC-07 (Listar Empresas), UC-08 (Detalhes da Empresa).  
-**Infra/DevOps:**
-
-- Ajustar storage de imagens (logo das empresas).
+1. **Sprint 1**: Sistema de autenticação funcional com perfis básicos
     
-- Deploy incremental.  
-    **Entregáveis:**  
-    ✅ Empresas cadastradas no sistema  
-    ✅ Listagem e busca básica por empresas  
-    ✅ Página de detalhes com informações principais
+2. **Sprint 2**: Catálogo de serviços navegável e sistema de gestão de conteúdo
     
-
----
-
-### 🟣 Sprint 3 – Promoções e Interações
-
-**Objetivo:** Permitir que empresas publiquem promoções e usuários interajam.  
-**UCs:** UC-11 (Publicar Promoção), UC-12 (Listar Promoções), UC-14 (Curtir/Salvar Promoções), UC-26 (Seguir Empresa), UC-27 (Notificações).  
-**Infra/DevOps:**
-
-- Configurar fila de notificações (opcional, se houver push/email).
+3. **Sprint 3**: Fluxo completo de reservas com calendário integrado
     
-- Deploy com atualizações de APIs.  
-    **Entregáveis:**  
-    ✅ Empresas publicam promoções  
-    ✅ Usuários veem lista de promoções  
-    ✅ Sistema de likes/salvos  
-    ✅ Seguir empresa e receber notificações
+4. **Sprint 4**: Sistema de pagamentos seguro e confiável
     
-
----
-
-### 🟣 Sprint 4 – Avaliações e Feedback
-
-**Objetivo:** Criar a parte de avaliações e reputação de empresas.  
-**UCs:** UC-16 (Avaliar Empresa), UC-17 (Ver Avaliações), UC-19 (Excluir/Editar Avaliação).  
-**Infra/DevOps:**
-
-- Configuração de permissões de usuários (apenas quem consumiu serviço pode avaliar).  
-    **Entregáveis:**  
-    ✅ Usuários avaliam empresas  
-    ✅ Empresas podem ver feedback  
-    ✅ Moderar avaliações (editar/excluir pelo autor)
+5. **Sprint 5**: Features de engajamento para aumentar retenção
     
-
----
-
-### 🟣 Sprint 5 – Painéis e Estatísticas
-
-**Objetivo:** Criar dashboards para empresas acompanharem engajamento.  
-**UCs:** UC-21 (Visualizar Estatísticas), UC-22 (Relatórios de Promoções), UC-23 (Engajamento de Usuários), UC-24 (Métricas de Avaliações).  
-**Infra/DevOps:**
-
-- Preparar queries otimizadas para relatórios.
-    
-- Deploy com dashboards integrados.  
-    **Entregáveis:**  
-    ✅ Painel com estatísticas básicas  
-    ✅ Relatório de promoções ativas  
-    ✅ Engajamento de usuários por promoções  
-    ✅ Métricas de avaliações
-    
-
----
-
-### 🟣 Sprint 6 – Funcionalidades Extras
-
-**Objetivo:** Entregar funcionalidades adicionais e polimento.  
-**UCs:** UC-13 (Compartilhar Promoção), UC-28 (Recomendações de Promoções), UC-29 (Sugestão de Empresas).  
-**Infra/DevOps:**
-
-- Otimizações de performance.
-    
-- Deploy em ambiente de produção com CI/CD completo.  
-    **Entregáveis:**  
-    ✅ Compartilhar promoções em redes sociais  
-    ✅ Recomendação personalizada de promoções  
-    ✅ Sugestão de empresas relevantes
+6. **Sprint 6**: Ferramentas de gestão e preparação para escala
 
 ---
 
 ```mermaid
 gantt
-    title Planejamento de Sprints com Dependências
+    title Roadmap de Desenvolvimento - App de Turismo
     dateFormat  YYYY-MM-DD
+    axisFormat %d/%m
 
-    section Sprint 1 - Cadastro e Login (Base do sistema)
-    US01 Cadastro de turista:done, des1, 2025-09-01, 7d
-    US02 Cadastro de empresa:done, des2, 2025-09-01, 7d
-    US15 Perfil usuário:done, des3, 2025-09-01, 7d
-    US16 Perfil empresa:done, des4, 2025-09-01, 7d
+    section Sprint 1 - Base do Sistema
+    Configuração Infraestrutura     :crit, s1infra, 2025-01-06, 14d
+    US01 - Autenticação Usuários    :active, s1auth, after s1infra, 10d
+    US02 - Cadastro Empresas        :active, s1emp, after s1infra, 12d
+    US03 - Gestão Perfis            :s1perf, after s1auth, 7d
 
-    section Sprint 2 - Catálogo e Exploração
-    US03 Listagem de serviços:active, des5, after des1, 7d
-    US05 Listagem de eventos:active, des6, after des1, 7d
-    US18 Busca e filtros:active, des7, after des5, 7d
-    US19 Geolocalização:active, des8, after des5, 7d
+    section Sprint 2 - Catálogo e Conteúdo
+    US04 - Busca e Filtros          :crit, s2busca, after s1auth, 14d
+    US05 - Detalhes Serviços        :s2detalhes, after s2busca, 10d
+    US06 - Cadastro Serviços        :s2cad, after s1emp, 12d
 
-    section Sprint 3 - Favoritos e Interações
-    US04 Favoritar serviços:des9, after des3, 7d
-    US13 Wishlist/Favoritos:des10, after des9, 7d
-    US14 Notificação de eventos/promoções:des11, after des6, 7d
-    US20 Alertas de promoções:des12, after des11, 7d
+    section Sprint 3 - Sistema de Reservas
+    US07 - Criação Reservas         :crit, s3reservas, after s2busca, 14d
+    US09 - Gestão Reservas          :s3gestao, after s3reservas, 10d
+    Sistema Calendário              :s3cal, after s3reservas, 8d
 
-    section Sprint 4 - Reservas e Pagamentos
-    US06 Cadastro de serviços/eventos:des13, after des2, 7d
-    US07 Ver reservas e pagamentos:des14, after des13, 7d
-    US08 Pagamento via AbacatePay:des15, after des14, 7d
-    US09 Webhook de confirmação:des16, after des15, 7d
-    US17 Histórico de reservas:des17, after des14, 7d
+    section Sprint 4 - Pagamentos
+    US08 - Integração Pagamentos    :crit, s4pag, after s3reservas, 14d
+    Webhooks Confirmação            :s4webhook, after s4pag, 7d
+    Histórico Transações            :s4hist, after s4pag, 5d
 
-    section Sprint 5 - Feedbacks e Relatórios
-    US11 Avaliações de turistas:des18, after des17, 7d
-    US22 Resposta a feedbacks:des19, after des18, 7d
-    US12 Relatórios de reservas/pagamentos:des20, after des14, 7d
-    US23 Painel analytics/engajamento:des21, after des20, 7d
+    section Sprint 5 - Engajamento
+    US11 - Sistema Favoritos        :s5fav, after s2busca, 10d
+    US12 - Sistema Avaliações       :s5avali, after s3reservas, 10d
+    US13 - Notificações             :s5notif, after s4pag, 8d
 
-    section Sprint 6 - Extras e Administração
-    US10 Painel administração:des22, after des2, 7d
-    US21 Sistema de mensagens:des23, after des13, 7d
-    US24 Cupons promocionais:des24, after des13, 7d
-
+    section Sprint 6 - Admin & Analytics
+    US10 - Painel Administrativo    :crit, s6admin, after s1emp, 14d
+    US14 - Relatórios Analytics     :s6rep, after s4pag, 12d
+    Monitoramento Sistema           :s6mon, after s6rep, 7d
+    Deploy Produção                 :crit, s6prod, after s6mon, 3d
 ```
+---
+
+## 📋 Legenda do Gantt:
+
+- **Crit** (Crítico): Tarefas essenciais para o fluxo principal
+    
+- **Barras sólidas**: Desenvolvimento ativo
+    
+- **Setas**: Dependências entre tarefas
+    
+- **Duração**: 2 semanas por sprint com margem para imprevisto

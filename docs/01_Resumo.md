@@ -56,7 +56,7 @@
     
 - **Pagamentos:** AbacatePay
     
-- **Extras:** Docker, cache para performance
+- **Extras:** Docker, Redis para performance
     
 
 ---
