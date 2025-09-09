@@ -12,7 +12,7 @@
 .idea/
 docker/
 Migrations/
-scripts/setup-ollama-commit.sh
+scripts/ollama-commit-gen.sh
 
 appsettings*.Development.json
 
