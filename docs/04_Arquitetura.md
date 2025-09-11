@@ -6,7 +6,6 @@ BarraTour/
 │   │   ├── BarraTour.API/                 # Camada de Apresentação
 │   │   │   ├── Controllers/               # Controladores REST
 │   │   │   ├── Middlewares/               # Middlewares customizados
-│   │   │   ├── Extensions/                # Extensões específicas da API
 │   │   │   ├── Properties/                # Propriedades do projeto
 │   │   │   ├── appsettings.json           # Configurações
 │   │   │   └── Program.cs                 # Ponto de entrada
@@ -24,8 +23,7 @@ BarraTour/
 │   │   │   ├── Enums/                     # Enumeradores
 │   │   │   ├── ValueObjects/              # Objetos de valor
 │   │   │   ├── Interfaces/                # Interfaces de domínio
-│   │   │   ├── Events/                    # Eventos de domínio
-│   │   │   └── Exceptions/                # Exceções de domínio
+│   │   │   └── Events/                    # Eventos de domínio
 │   │   │
 │   │   ├── BarraTour.Infrastructure/      # Camada de Infraestrutura
 │   │   │   ├── Data/                      # Contexto do BD e configurações
