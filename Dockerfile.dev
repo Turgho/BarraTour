@@ -33,4 +33,4 @@ COPY . .
 EXPOSE 80
 
 # Comando para desenvolvimento (watch mode com hot reload)
-ENTRYPOINT ["dotnet", "watch", "run", "--project", "src/BarraTour.Backend/BarraTour.Api/", "--urls"]
+ENTRYPOINT ["dotnet", "run", "--project", "src/BarraTour.Backend/BarraTour.Api/", "--urls", "http://0.0.0.0:80"]

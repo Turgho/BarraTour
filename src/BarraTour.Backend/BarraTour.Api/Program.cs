@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Text;
 using BarraTour.Infrastructure.Data;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,15 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Configuração básica
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-// Configuração do Data Protection
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddDataProtection()
-        .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "data-protection-keys")))
-        .SetApplicationName("BarraTourApp")
-        .UseEphemeralDataProtectionProvider();
-}
 
 var sqlConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                           ?? throw new ArgumentNullException($"SQL connection string not found");

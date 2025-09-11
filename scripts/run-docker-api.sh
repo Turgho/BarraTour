@@ -159,7 +159,7 @@ start_background_services() {
 
 # Função para iniciar a API em primeiro plano com hot reload
 start_api_foreground() {
-    echo "🚀 Iniciando API em primeiro plano com Hot Reload..."
+    echo "🚀 Iniciando API em primeiro plano..."
     
     # Verificar qual comando do Docker Compose está disponível
     if command -v docker-compose &> /dev/null; then
@@ -170,12 +170,12 @@ start_api_foreground() {
     
     echo "📍 API estará disponível em: http://localhost:5078"
     echo "📍 Swagger UI: http://localhost:5078/swagger"
-    echo "🔧 Hot Reload ativado - alterações no código serão refletidas automaticamente"
+    echo "🐛 Modo debug - erros serão mostrados claramente"
     echo "🛑 Para parar, pressione Ctrl+C"
     echo ""
     
-    # Iniciar API em primeiro plano (isso mantém o processo rodando)
-    $COMPOSE_CMD up api
+    # Iniciar API em primeiro plano SEM hot reload temporariamente
+    $COMPOSE_CMD up api 2>&1 | grep -v "dotnet watch" | grep -v "No C# changes"
 }
 
 # Função principal
