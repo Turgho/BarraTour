@@ -4,7 +4,7 @@
     
 - **Funcionalidades:**
     
-    - Cadastro de turista: nome, email, senha, idioma preferido.
+    - Cadastro de turista: nome, email, senha.
         
     - Cadastro de empresa: nome, email, senha, CNPJ/CPF, setor de atuação.
         

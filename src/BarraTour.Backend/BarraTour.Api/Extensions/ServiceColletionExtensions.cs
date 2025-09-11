@@ -90,9 +90,6 @@ public static class ServiceCollectionExtensions
             c.DefaultModelsExpandDepth(2);
             c.DefaultModelExpandDepth(2);
             c.DisplayOperationId();
-            
-            // Tema opcional (pode remover se preferir o padrão)
-            c.InjectStylesheet("/swagger-ui/custom.css");
         });
 
         return app;

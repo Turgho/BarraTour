@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-noble
 # Define variáveis de ambiente
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV DOTNET_USE_POLLING_FILE_WATCHER=1
-ENV ASPNETCORE_URLS=http://+:80;https://+:443
+ENV ASPNETCORE_URLS=http://+:80
 
 # Instala apenas ferramentas essenciais para desenvolvimento
 RUN apt-get update && \
@@ -31,7 +31,6 @@ COPY . .
 
 # Expõe as portas
 EXPOSE 80
-EXPOSE 443
 
 # Comando para desenvolvimento (watch mode com hot reload)
-ENTRYPOINT ["dotnet", "watch", "run", "--project", "src/BarraTour.Backend/BarraTour.Api/", "--urls", "http://0.0.0.0:80;https://0.0.0.0:443", "--non-interactive"]
+ENTRYPOINT ["dotnet", "watch", "run", "--project", "src/BarraTour.Backend/BarraTour.Api/", "--urls"]

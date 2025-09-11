@@ -12,7 +12,7 @@ services:
       - sql_data:/var/opt/mssql
       - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1" -b -o /dev/null
+      test: ["CMD-SHELL", "pidof sqlservr || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -52,14 +52,13 @@ services:
       - Jwt__Audience=${JWT_AUDIENCE}
       - Jwt__ExpiryInMinutes=${JWT_EXPIRY_IN_MINUTES}
       - DOTNET_USE_POLLING_FILE_WATCHER=1  # hot reload
-      - ASPNETCORE_URLS=http://0.0.0.0:80;https://0.0.0.0:443
+      - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "5078:80"
-      - "7249:443"
     volumes:
       - .:/app  # Monta o código fonte para hot reload
       - ~/.nuget/packages:/root/.nuget/packages  # Cache de pacotes NuGet
-      - ~/.aspnet/https:/root/.aspnet/https  # Certificados HTTPS
+      - aspnet_data_protection_keys:/root/.aspnet/DataProtection-Keys
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -70,3 +69,4 @@ services:
 volumes:
   sql_data:
   redis_data:
+  aspnet_data_protection_keys:

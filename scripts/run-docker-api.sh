@@ -75,6 +75,31 @@ setup_environment() {
     echo "✅ Ambiente Docker configurado"
 }
 
+# Função para aguardar até que um serviço esteja healthy
+wait_for_service() {
+    local service_name=$1
+    local max_attempts=30
+    local attempt=1
+    
+    echo "⏳ Aguardando serviço $service_name ficar healthy..."
+    
+    while [ $attempt -le $max_attempts ]; do
+        local status=$($COMPOSE_CMD ps -q $service_name | xargs docker inspect --format='{{.State.Health.Status}}' 2>/dev/null)
+        
+        if [ "$status" = "healthy" ]; then
+            echo "✅ Serviço $service_name está healthy"
+            return 0
+        fi
+        
+        echo "⚠️  Serviço $service_name ainda não está healthy (tentativa $attempt/$max_attempts). Status: $status"
+        attempt=$((attempt + 1))
+        sleep 5
+    done
+    
+    echo "❌ Serviço $service_name não ficou healthy após $max_attempts tentativas"
+    return 1
+}
+
 # Função para construir as imagens
 build_images() {
     echo "🏗️  Construindo imagens Docker..."
@@ -114,16 +139,21 @@ start_background_services() {
     
     # Aguardar serviços de background ficarem saudáveis
     echo "⏳ Aguardando serviços de background ficarem prontos..."
-    sleep 10
+    sleep 20  # Espera inicial para os serviços começarem
     
-    # Verificar status dos serviços
-    if ! $COMPOSE_CMD ps | grep -q "healthy"; then
-        echo "⚠️  Alguns serviços podem não estar totalmente saudáveis"
-        echo "📋 Status atual:"
-        $COMPOSE_CMD ps
+    # Esperar pelo SQL Server
+    if ! wait_for_service "sqlserver"; then
+        echo "❌ SQL Server não ficou healthy a tempo"
+        return 1
     fi
     
-    echo "✅ Serviços de background iniciados com sucesso"
+    # Esperar pelo Redis
+    if ! wait_for_service "redis"; then
+        echo "❌ Redis não ficou healthy a tempo"
+        return 1
+    fi
+    
+    echo "✅ Serviços de background iniciados e healthy"
     return 0
 }
 
