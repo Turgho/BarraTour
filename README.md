@@ -79,4 +79,4 @@ Se quiser contribuir (issues, PRs, feedback):
 
 ---
 
-Obrigado por visitar o **BarraTour** — se quiser, posso ajudar a gerar os `docs/*.md` finais, criar badges dinâmicos para CI, ou preparar um *demo* público (deploy) quando o MVP1 estiver pronto. Quer que eu gere algum arquivo `docs/` agora?
+Obrigado por visitar o **BarraTour**
