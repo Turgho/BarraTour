@@ -1,57 +1,95 @@
 #!/bin/bash
 
-# Verifica se o Ollama está instalado e acessível
+# Configurações
+CACHE_DIR="$HOME/.git_commit_cache"
+CACHE_TTL=600 # 10 minutos em segundos
+OLLAMA_MODEL="llama3.1:8b"
+
+# Verifica dependências
 if ! command -v ollama &> /dev/null; then
-    echo "Erro: Ollama não está instalado ou não está no PATH."
+    echo "Error: Ollama is not installed."
     exit 1
 fi
 
-# Verifica se o repositório é Git
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    echo "Erro: Este diretório não é um repositório Git."
+    echo "Error: Not a git repository."
     exit 1
 fi
 
-# Obtém as mudanças atuais
-CHANGES=$(git diff --staged --name-status)
-if [ -z "$CHANGES" ]; then
-    echo "Nenhuma alteração staged encontrada. Use 'git add' primeiro."
+# Cria diretório de cache se não existir
+mkdir -p "$CACHE_DIR"
+
+# Obtém arquivos staged
+STAGED_FILES=$(git diff --staged --name-only)
+if [ -z "$STAGED_FILES" ]; then
+    echo "No staged files found."
     exit 1
 fi
 
-# Prepara o prompt para o Ollama com instruções específicas
-PROMPT="Gere uma mensagem de commit concisa em português seguindo o Conventional Commits.
-Use prefixos convencionais: feat, fix, docs, style, refactor, test, chore, perf, ci, build.
-Exemplos: 
-- feat: adiciona funcionalidade X
-- fix: corrige problema Y
-- docs: atualiza documentação Z
-Para estas mudanças:\n$CHANGES\n\nMensagem:"
+# Gera hash das mudanças para usar como chave de cache
+CHANGE_HASH=$(git diff --staged --stat | sha256sum | cut -d' ' -f1)
+CACHE_FILE="$CACHE_DIR/$CHANGE_HASH"
 
-# Gera a mensagem de commit usando o Ollama
-COMMIT_MSG=$(ollama run llama3.1:8b "$PROMPT" | \
-    grep -v "^>>>" | \
+# Verifica se existe no cache
+if [ -f "$CACHE_FILE" ]; then
+    CACHE_TIME=$(stat -c %Y "$CACHE_FILE")
+    CURRENT_TIME=$(date +%s)
+    if [ $((CURRENT_TIME - CACHE_TIME)) -lt $CACHE_TTL ]; then
+        COMMIT_MSG=$(cat "$CACHE_FILE")
+        echo "Cached commit message: $COMMIT_MSG"
+        echo "Files: $(echo "$STAGED_FILES" | wc -l) modified"
+        read -t 5 -p "Use this message? (Y/n) " -n 1 -r
+        echo ""
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            git commit -m "$COMMIT_MSG" > /dev/null 2>&1
+            echo "✅ Commit completed with cached message"
+            exit 0
+        fi
+    fi
+fi
+
+# Prepara prompt com exemplos
+CHANGE_SUMMARY=$(git diff --staged --stat)
+PROMPT="Generate a concise commit message in English following Conventional Commits format.
+
+Examples:
+- feat: add user authentication module
+- fix: resolve calculation error in tax formula
+- docs: update API documentation
+- refactor: improve database query performance
+- style: format code according to guidelines
+
+Based on these changes:
+$CHANGE_SUMMARY
+
+Commit message:"
+
+# Gera nova mensagem usando GPU
+echo "Generating commit message with GPU..."
+COMMIT_MSG=$(OLLAMA_NUM_GPU=1 ollama run --nowordwrap $OLLAMA_MODEL "$PROMPT" | \
+    grep -E '^(feat|fix|docs|style|refactor|test|chore|perf|ci|build)' | \
     head -n 1 | \
-    sed 's/^"//;s/"$//' | \
-    sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | \
+    sed 's/\.$//')
 
-# Verifica se a mensagem foi gerada
+# Fallback se não encontrar padrão conventional
 if [ -z "$COMMIT_MSG" ]; then
-    echo "Falha ao gerar a mensagem de commit."
-    exit 1
+    COMMIT_MSG=$(ollama run --nowordwrap $OLLAMA_MODEL "$PROMPT" | \
+        grep -v "^>>>" | \
+        head -n 1 | \
+        sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | \
+        sed 's/\.$//')
+    
+    # Garante que tenha um prefixo válido
+    if [[ ! "$COMMIT_MSG" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build) ]]; then
+        COMMIT_MSG="chore: $COMMIT_MSG"
+    fi
 fi
 
-# Mostra a mensagem gerada para confirmação
-echo "Mensagem de commit gerada:"
-echo "$COMMIT_MSG"
-echo ""
-read -p "Confirmar commit? (s/N) " -n 1 -r
-echo ""
+# Salva no cache
+echo "$COMMIT_MSG" > "$CACHE_FILE"
 
-if [[ $REPLY =~ ^[Ss]$ ]]; then
-    git commit -m "$COMMIT_MSG"
-    echo "Commit realizado com a mensagem: $COMMIT_MSG"
-else
-    echo "Commit cancelado."
-    exit 0
-fi
+# Commit
+echo "Commit message: $COMMIT_MSG"
+git commit -m "$COMMIT_MSG" > /dev/null 2>&1
+echo "✅ Commit completed with new message"
