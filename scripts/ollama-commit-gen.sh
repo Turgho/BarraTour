@@ -38,12 +38,19 @@ if [ -f "$CACHE_FILE" ]; then
         COMMIT_MSG=$(cat "$CACHE_FILE")
         echo "Cached commit message: $COMMIT_MSG"
         echo "Files: $(echo "$STAGED_FILES" | wc -l) modified"
-        read -t 5 -p "Use this message? (Y/n) " -n 1 -r
+        read -p "Use this message? (Y/n) " -n 1 -r
         echo ""
         if [[ ! $REPLY =~ ^[Nn]$ ]]; then
-            git commit -m "$COMMIT_MSG" > /dev/null 2>&1
-            echo "✅ Commit completed with cached message"
-            exit 0
+            read -p "Confirm commit? (Y/n) " -n 1 -r
+            echo ""
+            if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+                git commit -m "$COMMIT_MSG" > /dev/null 2>&1
+                echo "✅ Commit completed with cached message"
+                exit 0
+            else
+                echo "❌ Commit canceled."
+                exit 0
+            fi
         fi
     fi
 fi
@@ -58,6 +65,11 @@ Examples:
 - docs: update API documentation
 - refactor: improve database query performance
 - style: format code according to guidelines
+- test: add unit tests for user service
+- chore: update dependencies
+- perf: optimize image loading
+- ci: configure GitHub Actions workflow
+- build: update webpack configuration
 
 Based on these changes:
 $CHANGE_SUMMARY
@@ -74,7 +86,7 @@ COMMIT_MSG=$(OLLAMA_NUM_GPU=1 ollama run --nowordwrap $OLLAMA_MODEL "$PROMPT" | 
 
 # Fallback se não encontrar padrão conventional
 if [ -z "$COMMIT_MSG" ]; then
-    COMMIT_MSG=$(ollama run --nowordwrap $OLLAMA_MODEL "$PROMPT" | \
+    COMMIT_MSG=$(OLLAMA_NUM_GPU=1 ollama run --nowordwrap $OLLAMA_MODEL "$PROMPT" | \
         grep -v "^>>>" | \
         head -n 1 | \
         sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | \
@@ -86,10 +98,23 @@ if [ -z "$COMMIT_MSG" ]; then
     fi
 fi
 
-# Salva no cache
-echo "$COMMIT_MSG" > "$CACHE_FILE"
+# Mostra a mensagem e pede confirmação
+echo "Generated commit message: $COMMIT_MSG"
+echo "Files to be committed:"
+git diff --staged --name-only | sed 's/^/  /'
+echo ""
 
-# Commit
-echo "Commit message: $COMMIT_MSG"
-git commit -m "$COMMIT_MSG" > /dev/null 2>&1
-echo "✅ Commit completed with new message"
+read -p "Confirm commit with this message? (Y/n) " -n 1 -r
+echo ""
+
+if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+    # Salva no cache
+    echo "$COMMIT_MSG" > "$CACHE_FILE"
+    
+    # Executa o commit
+    git commit -m "$COMMIT_MSG" > /dev/null 2>&1
+    echo "✅ Commit completed successfully"
+else
+    echo "❌ Commit canceled."
+    exit 0
+fi
