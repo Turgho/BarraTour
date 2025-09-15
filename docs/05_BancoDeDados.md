@@ -14,7 +14,7 @@ CREATE TABLE Users (
        UserId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
        Name NVARCHAR(100) NOT NULL,
        Email NVARCHAR(150) UNIQUE NOT NULL,
-       Phone NVARCHAR(20) NULL,
+       PhoneNumber NVARCHAR(20) NULL,
        PasswordHash NVARCHAR(255) NOT NULL,
        Role NVARCHAR(20) NOT NULL CHECK (Role IN ('tourist', 'company', 'admin')),
        Status NVARCHAR(20) DEFAULT 'active' CHECK (Status IN ('active', 'inactive', 'suspended')),

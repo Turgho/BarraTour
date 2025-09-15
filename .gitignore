@@ -12,7 +12,9 @@
 .idea/
 docker/
 Migrations/
+data-protection-keys/
 scripts/ollama-commit-gen.sh
+*.rdb
 
 appsettings*.Development.json
 

@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 using System.Text;
+using BarraTour.Application.Interfaces;
+using BarraTour.Application.Services;
+using BarraTour.Application.Validators.User;
+using BarraTour.Domain.Interfaces.Common;
+using BarraTour.Domain.Interfaces.User;
 using BarraTour.Infrastructure.Data;
-using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
+using BarraTour.Infrastructure.Repositories.Common;
+using BarraTour.Infrastructure.Repositories.User;
+using BarraTour.Infrastructure.Services.Redis;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +39,18 @@ if (!string.IsNullOrEmpty(redisConnectionString))
 
 // Configuração do Entity Framework
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    options.UseSqlServer(connectionString, 
+        sqlOptions => 
+        {
+            sqlOptions.MigrationsAssembly("BarraTour.Api");
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 5,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        });
+});
 
 // Configuração da Autenticação JWT
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -67,25 +83,37 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("tourist"));
 });
 
-// Configuração do Swagger
+// Configuração do Swagger com JWT
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo 
-    { 
-        Title = "BarraTour API", 
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "BarraTour API",
         Version = "v1",
-        Description = "API para sistema de turismo de Barra Bonita - SP"
+        Description = "API para o sistema de turismo BarraTour",
+        Contact = new OpenApiContact
+        {
+            Name = "Equipe BarraTour",
+            Email = "contato@barraTour.com"
+        },
+        License = new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT")
+        }
     });
-    
+
+    // Configuração de segurança JWT 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Authorization header usando o esquema Bearer. Exemplo: \"Authorization: Bearer {token}\"",
         Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Description = "Insira o token JWT no formato: Bearer {token}"
     });
-    
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -100,6 +128,9 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    // Usar nomes completos para evitar conflitos
+    c.CustomSchemaIds(x => x.FullName);
 });
 
 // Health Checks
@@ -130,43 +161,52 @@ builder.Services.AddCors(options =>
 });
 
 // Registro de serviços da aplicação
-// builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRedisService, RedisService>();
 // builder.Services.AddScoped<IAuthService, AuthService>();
 // builder.Services.AddScoped<ITouristService, TouristService>();
 // builder.Services.AddScoped<ICompanyService, CompanyService>();
 // builder.Services.AddScoped<IServiceService, ServiceService>();
 // builder.Services.AddScoped<IBookingService, BookingService>();
 
+// Registro de Transaction
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Registro de repositórios
-// builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 // builder.Services.AddScoped<ITouristRepository, TouristRepository>();
 // builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 // builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
 // builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 // Registro de validadores
-// builder.Services.AddScoped<UserValidator>();
+builder.Services.AddScoped<UserValidator>();
 // builder.Services.AddScoped<TouristValidator>();
 // builder.Services.AddScoped<CompanyValidator>();
 // builder.Services.AddScoped<ServiceValidator>();
 // builder.Services.AddScoped<BookingValidator>();
+
+// Registro de AutoMappers
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
 // Configurar pipeline de requisições
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BarraTour API V1");
-        c.RoutePrefix = "swagger";
-    });
-    
     // Aplicar migrações do banco de dados em desenvolvimento
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
+    
+    // Gera o endpoint Swagger JSON
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BarraTour API v1");
+        c.RoutePrefix = "swagger";
+    });
 }
 
 app.UseCors("AllowAll");
@@ -177,11 +217,17 @@ app.UseAuthorization();
 // Health Check endpoint
 app.MapHealthChecks("/health");
 
-// Rota básica para verificar se a API está funcionando
-app.MapGet("/", () => Results.Ok(new { 
-    message = "Barra Tour API está funcionando!", 
-    timestamp = DateTime.UtcNow 
-}));
+// Rota health check
+app.MapGet("/", () => new
+{
+    Message = "BarraTour API está funcionando!",
+    Documentation = new
+    {
+        SwaggerUI = "/swagger",
+        OpenAPI = "/swagger/v1/swagger.json"
+    },
+    Timestamp = DateTime.UtcNow
+});
 
 app.MapControllers();
 
